@@ -1,5 +1,17 @@
 import geopandas as gpd
+import folium
 from shapely.geometry import Polygon
+
+def generate_map(location_info):
+    """
+    Generates a map with a marker on the given location.
+
+    Args:
+        location_info (dict): A dictionary containing the location information.
+    """
+    m = folium.Map(location=[location_info['latitude'], location_info['longitude']], zoom_start=13)
+    folium.Marker([location_info['latitude'], location_info['longitude']], popup=location_info['name']).add_to(m)
+    m.save("map.html")
 
 def filter_non_eurocentric_locations(gdf):
     """

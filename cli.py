@@ -4,7 +4,7 @@ from shapely.geometry import Point
 
 from location_extractor import extract_location_entities
 from geocoder import get_location_info
-from geospatial_analyzer import filter_non_eurocentric_locations
+from geospatial_analyzer import filter_non_eurocentric_locations, generate_map
 
 
 @click.group()
@@ -49,6 +49,18 @@ def filter(input_file, output_file):
     non_eurocentric_gdf = filter_non_eurocentric_locations(gdf)
     non_eurocentric_gdf.to_file(output_file)
     click.echo(f"Filtered shapefile saved to {output_file}")
+
+
+@cli.command()
+@click.argument('location')
+def map(location):
+    """Generates a map for a given location."""
+    info = get_location_info(location)
+    if info:
+        generate_map(info)
+        click.echo("Map saved to map.html")
+    else:
+        click.echo(f"Location '{location}' not found.")
 
 
 if __name__ == '__main__':
